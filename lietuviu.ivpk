@@ -20136,8 +20136,8 @@ gruzdino/PNX
 gruzdinti/TNX
 #gruzdumas/D                    # yra gruzdus/.*Q
 gruzdus/BQN
-gruzinas/D
-gruzinë/D
+#gruzinas/D                     # PRIVATE
+#gruzinë/D                      # PRIVATE
 gruzti/TNXaf
 gruþas/D
 gruþë/D
@@ -62875,7 +62875,7 @@ praþvingti/TNX
 praþvitrëja/ENX
 praþvitrëjo/PNX
 praþvitrëti/TNX
-precendentas/D
+#precendentas/D             # PRIVATE
 precizija/D
 precizinis/BUN
 predikatas/D

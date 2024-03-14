@@ -16,16 +16,21 @@ import sys
 import getopt
 import codecs
 
-__version__ = '1.0a'
-__program__ = 'ispell2myspell.py'
+__version__ = "1.0a"
+__program__ = "ispell2myspell.py"
 
 __usage_short = (
-"""Usage:
+    (
+        """Usage:
   %s [OPTION...] ISPELL_AFF_FILE > MYSPELL_AFF_FILE
-""") % __program__
-
-__usage_full = (__usage_short +
 """
+    )
+    % __program__
+)
+
+__usage_full = (
+    __usage_short
+    + """
 Converts ispell affix file to OpenOffice's MySpell format.
 
 Options:
@@ -52,7 +57,8 @@ Notes:
 
   --dec overrides ISPELL_AFF_FILE encoding.
 
-""")
+"""
+)
 
 
 class AffixTable:
@@ -76,7 +82,7 @@ class AffixTable:
         while not line:
             line = self._in.readline()
             self.raw_line = line
-            if line == "": # EOF
+            if line == "":  # EOF
                 break
             line = self._format(line)
         self.line = line
@@ -84,8 +90,7 @@ class AffixTable:
 
     def _format(self, s):
         "Removes spaces, comments (#.*) from a string."
-        return re.sub(r"(#.*)|(\s+)", '', s)
-
+        return re.sub(r"(#.*)|(\s+)", "", s)
 
     def _read_in(self):
         "Reads in and parses affix file"
@@ -104,7 +109,7 @@ class AffixTable:
                 atype = m.group(1)
                 if self.affs.get(atype) is None:
                     self.affs[atype] = {}
-                    self.affs[atype]['flags'] = []
+                    self.affs[atype]["flags"] = []
                 continue
             if not atype:
                 continue
@@ -114,19 +119,19 @@ class AffixTable:
                 rules = []
                 opt, flag = m.groups()
                 # original affix flags order
-                self.affs[atype]['flags'].append(flag)
+                self.affs[atype]["flags"].append(flag)
                 self.affs[atype][flag] = {
-                    'rules': rules,
-                    'combine': opt == '*',
-                    'compound': opt == '~',
-                    }
+                    "rules": rules,
+                    "combine": opt == "*",
+                    "compound": opt == "~",
+                }
                 continue
 
-            if '>' in self.line:
-                cond, repl = self.raw_line.lower().split('>', 1)
+            if ">" in self.line:
+                cond, repl = self.raw_line.lower().split(">", 1)
                 # wrap non-separated chars in [] (alternatives in ispell)
                 cond = re.sub(r"\s*([^\[\]\s]{2,})\s", r"[\1]", cond)
-                m = self.rule_re.search(self._format(cond + '>' + repl))
+                m = self.rule_re.search(self._format(cond + ">" + repl))
                 if m:
                     (cond, strip, add) = m.groups()
                     # null/empty string for myspell aff strip/add parts is 0
@@ -138,7 +143,7 @@ class AffixTable:
         "Dumps MySpell affix table to stdout."
 
         out = sys.stdout
-        if sys.version_info >= (3,0):
+        if sys.version_info >= (3, 0):
             out = sys.stdout.buffer
         out = codecs.getwriter(dst_enc)(out)
 
@@ -146,7 +151,7 @@ class AffixTable:
         if myspell_cfg_file:
             my_aff = codecs.open(myspell_cfg_file, "r", "utf-8")
             for line in my_aff:
-                if re.match(r'^\s*#|SET', line, re.I):
+                if re.match(r"^\s*#|SET", line, re.I):
                     continue
                 ml.append(line)
             my_aff.close()
@@ -157,22 +162,23 @@ class AffixTable:
         out.writelines(ml)
 
         # dump myspell affix table
-        for (_atype, atype) in [('prefixes', 'PFX'), ('suffixes', 'SFX')]:
+        for _atype, atype in [("prefixes", "PFX"), ("suffixes", "SFX")]:
 
-            flags = self.affs[_atype]['flags']
+            flags = self.affs[_atype]["flags"]
             if sort:
                 flags.sort()
 
             for flag in flags:
                 aff = self.affs[_atype][flag]
                 # affix header
-                out.write("\n%s %s %s %d\n" %
-                              (atype, flag, ("N", "Y")[aff['combine']],
-                                   len(aff['rules'])))
+                out.write(
+                    "\n%s %s %s %d\n"
+                    % (atype, flag, ("N", "Y")[aff["combine"]], len(aff["rules"]))
+                )
                 # affix rules
-                for (strip, add, cond) in aff['rules']:
-                    out.write("%s %s %-7s %-15s %s\n" %
-                                  (atype, flag, strip, add, cond))
+                for strip, add, cond in aff["rules"]:
+                    out.write("%s %s %-7s %-15s %s\n" % (atype, flag, strip, add, cond))
+
 
 def _encoding_name(enc):
     codecs.lookup(enc)
@@ -182,11 +188,14 @@ def _encoding_name(enc):
         pass
     return enc
 
+
 def main():
     try:
-        opts, files = getopt.getopt(sys.argv[1:],
-                        "hc:d:e:sv",
-                        ["help", "cfg=", "dec=", "enc=", "sort", "version"])
+        opts, files = getopt.getopt(
+            sys.argv[1:],
+            "hc:d:e:sv",
+            ["help", "cfg=", "dec=", "enc=", "sort", "version"],
+        )
     except getopt.GetoptError:
         print(sys.exc_info()[1])
         print(__usage_short)
@@ -194,7 +203,7 @@ def main():
 
     sort_aff = False
     src_enc = dst_enc = None
-    myspell_cfg_file =  None
+    myspell_cfg_file = None
 
     for opt, arg in opts:
         if opt in ("-h, --help"):
@@ -214,7 +223,6 @@ def main():
         else:
             assert False, "unhandled option"
 
-
     if len(files) >= 1:
         ispell_aff_file = files[0]
     else:
@@ -224,10 +232,9 @@ def main():
 
     # coding lookup (PEP263)
     if not src_enc:
-        f = codecs.open(ispell_aff_file, "r", 'ascii', 'ignore')
+        f = codecs.open(ispell_aff_file, "r", "ascii", "ignore")
         for n in range(2):
-            m = re.match(r"^\s*#.*?coding[:=]\s*([-_.a-zA-Z0-9]+)",
-                             f.readline(), re.I)
+            m = re.match(r"^\s*#.*?coding[:=]\s*([-_.a-zA-Z0-9]+)", f.readline(), re.I)
             if m:
                 src_enc = m.group(1)
                 break
@@ -236,20 +243,24 @@ def main():
     if src_enc:
         src_enc = _encoding_name(src_enc)
     else:
-        print("Unknown ispell aff file encoding: "
-                  "missing --enc arg and not specified in file.")
+        print(
+            "Unknown ispell aff file encoding: "
+            "missing --enc arg and not specified in file."
+        )
         sys.exit(3)
 
     if dst_enc:
         dst_enc = _encoding_name(dst_enc)
     else:
         dst_enc = src_enc
-        sys.stderr.write("Output (myspell aff) encoding not specified; "
-                             "assuming the same as input '%s'.\n" % dst_enc)
+        sys.stderr.write(
+            "Output (myspell aff) encoding not specified; "
+            "assuming the same as input '%s'.\n" % dst_enc
+        )
 
     conv = AffixTable(ispell_aff_file, src_enc)
     conv.dump_myspell_aff(myspell_cfg_file, dst_enc, sort_aff)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

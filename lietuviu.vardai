@@ -21901,7 +21901,7 @@ Graikija/D
 Grenada/D
 Grenadinai/D
 Grenlandija/D
-Gruzija/D
+#Gruzija/D          # PRIVATE
 Guamas/D
 Gvadelupa/D
 Gvatemala/D
@@ -22093,7 +22093,7 @@ Bukareðtas/D
 Dublinas/D
 Helsinkis/D
 Jerevanas/D
-Kijevas/D
+#Kijevas/D                  # PRIVATE
 Kiðiniovas/D
 Kopenhaga/D
 Lisabona/D

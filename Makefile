@@ -36,7 +36,8 @@ DICTS := lietuviu.zodziai \
          lietuviu.vardai \
          lietuviu.veiksmazodziai \
          lietuviu.ivpk \
-         lietuviu.ivairus
+         lietuviu.ivairus \
+         lietuviu.private
 
 
 ## kai kas (ką make turėtų rasti) yra gilesniuose kataloguose

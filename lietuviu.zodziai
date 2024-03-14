@@ -2814,8 +2814,8 @@ grupelë/D
 grupinis/BU
 grupiokas/D
 grupuotë/D
-gruzinas/D
-gruziniðkas/BNQ
+#gruzinas/D             # PRIVATE
+#gruziniðkas/BNQ        # PRIVATE
 gubernija/D
 gudrybë/D
 gudrus/BQN
@@ -9210,8 +9210,8 @@ transmisinis/BUN
 transnacionalinis/BUN
 transportas/D
 transporterinis/BUN
-transvestitas/D
-transvestitë/D
+#transvestitas/D                # PRIVATE
+#transvestitë/D                 # PRIVATE
 transakcija/D
 tranzitas/D
 tranzitinis/BUN
